@@ -3,7 +3,7 @@ A PostgreSQL database schema for Hyper Parameter Search (HPS) using pylearn2.
 Each pylearn2 class has its own Table.
 
 TODO:
-    add Foreign Key constraints
+    add Foreign Key constraints?
 */
 
 --DROP SCHEMA hps3 CASCADE;
@@ -51,6 +51,20 @@ CREATE TABLE hps3.ddm_cifar100 (
 	one_hot 	BOOLEAN DEFAULT True,
 	PRIMARY KEY (ddm_id)
 ) INHERITS (hps3.ddm);
+
+CREATE TABLE hps3.ddm_mnist (
+	which_set	VARCHAR(255), 
+	center 		BOOLEAN DEFAULT False,
+	binarize	BOOLEAN DEFAULT False,
+	shuffle		BOOLEAN DEFAULT False,
+	axes 		VARCHAR(255) DEFAULT 'b01c',
+	start		INT4, 
+	stop 		INT4, 
+	one_hot 	BOOLEAN DEFAULT True,
+	PRIMARY KEY (ddm_id)
+) INHERITS (hps3.ddm);
+
+/* Model */
 
 CREATE TABLE hps3.model (
 	model_class	VARCHAR(255),

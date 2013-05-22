@@ -41,9 +41,9 @@ from pylearn2.models.maxout import Maxout, MaxoutConvC01B
 from pylearn2.monitor import Monitor
 from pylearn2.space import VectorSpace, Conv2DSpace, CompositeSpace, Space
 from pylearn2.train_extensions.best_params import MonitorBasedSaveBest
-from pylearn2.train_extensions import TrainExtension
 from pylearn2.datasets import preprocessing as pp
 from pylearn2.datasets.cifar100 import CIFAR100
+from pylearn2.datasets.mnist import MNIST
 
 from database import DatabaseHandler
 
@@ -77,9 +77,6 @@ class HPS:
     
     For now, I just use it instead of the jobman database to try various 
     hyperparameter configurations.
-    
-    Curriculum:
-        start with random jobs for very few epochs (30) each. 
     """
     
     def __init__(self, 
@@ -987,6 +984,23 @@ class HPS:
         axes = self.get_axes(axes_char)
         return CIFAR100(which_set=which_set,center=center,
                     gcn=gcn,toronto_prepro=toronto_prepro,axes=axes,
+                    start=start,stop=stop,one_hot=one_hot)
+    
+    def get_ddm_mnist(self, ddm_id):
+        row =  self.db.executeSQL("""
+        SELECT  which_set, center, shuffle, one_hot, binarize, start,
+                stop, axes
+        FROM hps3.ddm_mnist
+        WHERE ddm_id = %s
+        """, (ddm_id,), self.db.FETCH_ONE)
+        if not row or row is None:
+            raise HPSData("No cifar100 ddm for ddm_id="\
+                +str(ddm_id))
+        (which_set, center, shuffle, one_hot, binarize, start,
+            stop, axes_char) = row
+        axes = self.get_axes(axes_char)
+        return MNIST(which_set=which_set,center=center,
+                    shuffle=shuffle,binarize=binarize,axes=axes,
                     start=start,stop=stop,one_hot=one_hot)
                     
 

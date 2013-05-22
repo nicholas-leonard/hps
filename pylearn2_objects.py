@@ -36,6 +36,7 @@ from pylearn2.linear import conv2d
 
 from pylearn2.costs.cost import Cost
 from pylearn2.costs.mlp import WeightDecay, L1WeightDecay
+from pylearn2.train_extensions import TrainExtension
 from pylearn2.models.mlp import MLP, max_pool_c01b, max_pool, Layer
 from pylearn2.space import VectorSpace, Conv2DSpace, CompositeSpace, Space
 
